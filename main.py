@@ -312,7 +312,7 @@ class InvoiceProcessingApp:
             names=list(status_counts.keys()),
             title="Processing Status Distribution"
         )
-        st.plotly_chart(fig_status, use_container_width=True)
+        st.plotly_chart(fig_status, width='stretch')
         
         # Processing timeline
         timeline_data = []
@@ -336,7 +336,7 @@ class InvoiceProcessingApp:
                 title="Processing Duration by Invoice"
             )
             fig_timeline.update_layout(xaxis_tickangle=-45)
-            st.plotly_chart(fig_timeline, use_container_width=True)
+            st.plotly_chart(fig_timeline, width='stretch')
     
     def render_invoice_details_tab(self):
         """Render invoice details tab"""
@@ -373,8 +373,8 @@ class InvoiceProcessingApp:
                 return "background-color: #f8d7da; color: #721c24"
             return ""
         
-        styled_df = df_invoices.style.applymap(style_status, subset=['Status'])
-        st.dataframe(styled_df, use_container_width=True)
+        styled_df = df_invoices.style.map(style_status, subset=['Status'])
+        st.dataframe(styled_df, width='stretch')
         
         # Detailed view selector
         st.subheader("🔍 Detailed Invoice View")
@@ -425,7 +425,7 @@ class InvoiceProcessingApp:
                 })
             
             df_audit = pd.DataFrame(audit_data)
-            st.dataframe(df_audit, use_container_width=True)
+            st.dataframe(df_audit, width='stretch')
     
     def render_agent_performance_tab(self):
         """Render agent performance tab"""
@@ -466,7 +466,7 @@ class InvoiceProcessingApp:
         
         if performance_data:
             df_performance = pd.DataFrame(performance_data)
-            st.dataframe(df_performance, use_container_width=True)
+            st.dataframe(df_performance, width='stretch')
             
             # Performance charts
             col1, col2 = st.columns(2)
@@ -479,7 +479,7 @@ class InvoiceProcessingApp:
                     y="Success Rate",
                     title="Agent Success Rates"
                 )
-                st.plotly_chart(fig_success, use_container_width=True)
+                st.plotly_chart(fig_success, width='stretch')
             
             with col2:
                 # Duration chart
@@ -490,7 +490,7 @@ class InvoiceProcessingApp:
                     y="Duration",
                     title="Average Processing Duration (ms)"
                 )
-                st.plotly_chart(fig_duration, use_container_width=True)
+                st.plotly_chart(fig_duration, width='stretch')
     
     def render_escalations_tab(self):
         """Render escalations tab"""
@@ -550,7 +550,7 @@ class InvoiceProcessingApp:
                 title="Risk Level vs Invoice Amount",
                 labels={"x": "Invoice Amount ($)", "y": "Risk Level"}
             )
-            st.plotly_chart(fig_risk, use_container_width=True)
+            st.plotly_chart(fig_risk, width='stretch')
         
         # Processing efficiency metrics
         processing_times = []
@@ -568,7 +568,7 @@ class InvoiceProcessingApp:
                 title="Processing Time Distribution",
                 labels={"x": "Processing Time (minutes)", "y": "Count"}
             )
-            st.plotly_chart(fig_efficiency, use_container_width=True)
+            st.plotly_chart(fig_efficiency, width='stretch')
     
     def show_workflow_diagram(self):
         """Show workflow diagram"""
