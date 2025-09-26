@@ -300,10 +300,24 @@ class InvoiceProcessingGraph:
         
         try:
             # Execute workflow
-            final_state = await self.compiled_graph.ainvoke(
+            result = await self.compiled_graph.ainvoke(
                 initial_state,
                 config={"thread_id": initial_state.process_id}
             )
+            
+            # Extract final state from LangGraph result
+            if hasattr(result, 'values'):
+                final_state = result.values
+            elif isinstance(result, dict):
+                final_state = result
+            else:
+                final_state = initial_state
+            
+            # Ensure we have a proper state object
+            if not hasattr(final_state, 'updated_at'):
+                final_state.updated_at = datetime.now()
+            if not hasattr(final_state, 'created_at'):
+                final_state.created_at = initial_state.created_at
             
             # Calculate processing duration
             duration_ms = int((final_state.updated_at - final_state.created_at).total_seconds() * 1000)
