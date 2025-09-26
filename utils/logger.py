@@ -105,7 +105,7 @@ class StructuredLogger:
     def log_agent_start(self, agent_name: str, process_id: str, **kwargs):
         """Log agent execution start"""
         self.logger.info(
-            f"🚀 Agent {agent_name} started for process {process_id}",
+            f"[START] Agent {agent_name} started for process {process_id}",
             extra={"agent": agent_name, "process_id": process_id, **kwargs}
         )
     
@@ -113,7 +113,7 @@ class StructuredLogger:
                           duration_ms: int, **kwargs):
         """Log agent execution completion"""
         self.logger.info(
-            f"✅ Agent {agent_name} completed for process {process_id} "
+            f"[COMPLETE] Agent {agent_name} completed for process {process_id} "
             f"in {duration_ms}ms",
             extra={
                 "agent": agent_name, 
@@ -127,7 +127,7 @@ class StructuredLogger:
                        error: Exception, **kwargs):
         """Log agent execution error"""
         self.logger.error(
-            f"❌ Agent {agent_name} failed for process {process_id}: {str(error)}",
+            f"[ERROR] Agent {agent_name} failed for process {process_id}: {str(error)}",
             extra={
                 "agent": agent_name,
                 "process_id": process_id,
@@ -141,7 +141,7 @@ class StructuredLogger:
     def log_decision(self, agent_name: str, process_id: str, 
                     decision: str, reasoning: str, confidence: float = None):
         """Log agent decision"""
-        message = f"🤔 Agent {agent_name} decided: {decision} - {reasoning}"
+        message = f"[DECISION] Agent {agent_name} decided: {decision} - {reasoning}"
         if confidence:
             message += f" (confidence: {confidence:.2f})"
         
@@ -160,7 +160,7 @@ class StructuredLogger:
                       reason: str, **kwargs):
         """Log escalation event"""
         self.logger.warning(
-            f"⚠️ Agent {agent_name} escalating process {process_id}: {reason}",
+            f"[ESCALATION] Agent {agent_name} escalating process {process_id}: {reason}",
             extra={
                 "agent": agent_name,
                 "process_id": process_id,
@@ -172,7 +172,7 @@ class StructuredLogger:
     def log_workflow_start(self, workflow_type: str, process_id: str, **kwargs):
         """Log workflow start"""
         self.logger.info(
-            f"🔄 Starting {workflow_type} workflow for process {process_id}",
+            f"[WORKFLOW] Starting {workflow_type} workflow for process {process_id}",
             extra={
                 "workflow_type": workflow_type,
                 "process_id": process_id,
@@ -184,7 +184,7 @@ class StructuredLogger:
                              duration_ms: int, **kwargs):
         """Log workflow completion"""
         self.logger.info(
-            f"🎉 Completed {workflow_type} workflow for process {process_id} "
+            f"[WORKFLOW_COMPLETE] Completed {workflow_type} workflow for process {process_id} "
             f"in {duration_ms}ms",
             extra={
                 "workflow_type": workflow_type,
@@ -197,7 +197,7 @@ class StructuredLogger:
     def log_metric(self, metric_name: str, value: float, **kwargs):
         """Log metric value"""
         self.logger.info(
-            f"📊 Metric {metric_name}: {value}",
+            f"[METRIC] {metric_name}: {value}",
             extra={
                 "metric_name": metric_name,
                 "metric_value": value,
