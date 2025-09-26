@@ -451,6 +451,38 @@ class InvoiceProcessingGraph:
             health_status["graph_compilation"] = f"failed: {str(e)}"
         
         return health_status
+    
+    def _extract_final_state(self, result, initial_state: InvoiceProcessingState) -> InvoiceProcessingState:
+        """Extract and validate final state from LangGraph result"""
+        try:
+            # Try different ways to extract the state
+            if hasattr(result, 'values'):
+                candidate = result.values
+            elif isinstance(result, dict):
+                candidate = result
+            else:
+                candidate = result
+            
+            # Check if it's a proper state object
+            if hasattr(candidate, 'updated_at') and hasattr(candidate, 'process_id'):
+                final_state = candidate
+            else:
+                # Fall back to initial state
+                final_state = initial_state
+                final_state.updated_at = datetime.now()
+            
+            # Ensure timestamps are set
+            if not hasattr(final_state, 'updated_at') or final_state.updated_at is None:
+                final_state.updated_at = datetime.now()
+            if not hasattr(final_state, 'created_at') or final_state.created_at is None:
+                final_state.created_at = initial_state.created_at
+            
+            return final_state
+            
+        except Exception as e:
+            self.logger.logger.warning(f"State extraction failed: {e}, using initial state")
+            initial_state.updated_at = datetime.now()
+            return initial_state
 
 
 # Global workflow instance
