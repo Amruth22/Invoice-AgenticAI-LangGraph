@@ -32,3 +32,10 @@ asyncio==3.4.3
 aiohttp==3.9.1
 redis==5.0.1
 celery==5.3.4
+
+# Fuzzy string matching for validation
+fuzzywuzzy==0.18.0
+python-Levenshtein==0.21.1
+
+# Additional utilities
+requests==2.31.0
