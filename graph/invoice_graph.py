@@ -422,7 +422,7 @@ class InvoiceProcessingGraph:
         """
         health_status = {
             "workflow_status": "healthy",
-            "timestamp": "datetime.now().isoformat()",
+            "timestamp": datetime.now().isoformat(),
             "agents": {},
             "graph_status": "healthy"
         }
