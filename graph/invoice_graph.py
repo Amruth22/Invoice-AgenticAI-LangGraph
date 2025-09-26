@@ -307,17 +307,22 @@ class InvoiceProcessingGraph:
             )
             
             # Extract final state from LangGraph result
-            if hasattr(result, 'values'):
+            if hasattr(result, 'values') and hasattr(result.values, 'updated_at'):
                 final_state = result.values
-            elif isinstance(result, dict):
+            elif isinstance(result, dict) and 'updated_at' in result:
+                # Convert dict to state object
+                final_state = InvoiceProcessingState(**result)
+            elif hasattr(result, 'updated_at'):
                 final_state = result
             else:
+                # Use initial state and update timestamp
                 final_state = initial_state
-            
-            # Ensure we have a proper state object
-            if not hasattr(final_state, 'updated_at'):
                 final_state.updated_at = datetime.now()
-            if not hasattr(final_state, 'created_at'):
+            
+            # Ensure we have proper timestamps
+            if not hasattr(final_state, 'updated_at') or final_state.updated_at is None:
+                final_state.updated_at = datetime.now()
+            if not hasattr(final_state, 'created_at') or final_state.created_at is None:
                 final_state.created_at = initial_state.created_at
             
             # Calculate processing duration
