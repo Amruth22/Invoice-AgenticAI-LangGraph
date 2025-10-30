@@ -13,8 +13,8 @@ import plotly.graph_objects as go
 from typing import Dict, Any, List
 
 # Import our LangGraph workflow and components
-from graph.invoice_graph import get_workflow
-from graph.state_models import ProcessingStatus, ValidationStatus, RiskLevel, PaymentStatus
+from invoice_graph import get_workflow
+from state_models import ProcessingStatus, ValidationStatus, RiskLevel, PaymentStatus
 from utils.logger import setup_logging, get_logger
 
 # Configure Streamlit page

@@ -9,7 +9,7 @@ from datetime import datetime
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
 
-from graph.state_models import (
+from state_models import (
     InvoiceProcessingState, ProcessingStatus, ValidationStatus,
     RiskLevel, PaymentStatus, WORKFLOW_CONFIGS
 )

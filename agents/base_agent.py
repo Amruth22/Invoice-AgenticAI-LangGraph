@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 
-from graph.state_models import InvoiceProcessingState, ProcessingStatus, AuditTrail
+from state_models import InvoiceProcessingState, ProcessingStatus, AuditTrail
 from utils.logger import get_logger
 
 
