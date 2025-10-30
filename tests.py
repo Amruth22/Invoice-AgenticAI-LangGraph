@@ -213,7 +213,7 @@ class TestInvoiceAgenticAI(unittest.TestCase):
         )
         
         # Create a sample validation result
-        from graph.state_models import ValidationResult, ValidationStatus
+        from state_models import ValidationResult, ValidationStatus
         validation_result = ValidationResult(
             validation_status=ValidationStatus.VALID
         )
@@ -235,7 +235,7 @@ class TestInvoiceAgenticAI(unittest.TestCase):
         agent = PaymentAgent(config)
         
         # Create sample validation and risk results
-        from graph.state_models import ValidationResult, ValidationStatus, RiskAssessment
+        from state_models import ValidationResult, ValidationStatus, RiskAssessment
         validation_result = ValidationResult(
             validation_status=ValidationStatus.VALID
         )
@@ -341,7 +341,7 @@ class TestInvoiceAgenticAI(unittest.TestCase):
         agent = RiskAgent(config)
         
         # Create validation result
-        from graph.state_models import ValidationResult, ValidationStatus
+        from state_models import ValidationResult, ValidationStatus
         validation_result = ValidationResult(
             validation_status=ValidationStatus.VALID
         )
