@@ -374,7 +374,7 @@ class InvoiceProcessingApp:
             return ""
         
         styled_df = df_invoices.style.map(style_status, subset=['Status'])
-        st.dataframe(styled_df, width='stretch')
+        st.dataframe(styled_df, use_container_width=True)
         
         # Detailed view selector
         st.subheader("🔍 Detailed Invoice View")
@@ -425,7 +425,7 @@ class InvoiceProcessingApp:
                 })
             
             df_audit = pd.DataFrame(audit_data)
-            st.dataframe(df_audit, width='stretch')
+            st.dataframe(df_audit, use_container_width=True)
     
     def render_agent_performance_tab(self):
         """Render agent performance tab"""
@@ -466,7 +466,7 @@ class InvoiceProcessingApp:
         
         if performance_data:
             df_performance = pd.DataFrame(performance_data)
-            st.dataframe(df_performance, width='stretch')
+            st.dataframe(df_performance, use_container_width=True)
             
             # Performance charts
             col1, col2 = st.columns(2)

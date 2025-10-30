@@ -179,7 +179,10 @@ class InvoiceProcessingGraph:
     async def _escalation_agent_node(self, state: InvoiceProcessingState) -> InvoiceProcessingState:
         """Execute escalation agent"""
         agent = agent_registry.get("escalation")
-        return await agent.run(state)
+        state = await agent.run(state)
+        # Mark as escalated after escalation agent completes
+        state.overall_status = ProcessingStatus.ESCALATED
+        return state
     
     async def _human_review_node(self, state: InvoiceProcessingState) -> InvoiceProcessingState:
         """Handle human review requirement"""
@@ -383,7 +386,7 @@ class InvoiceProcessingGraph:
                 final_results.append(result)
         
         # Log batch completion
-        successful = sum(1 for r in final_results if r.overall_status == ProcessingStatus.COMPLETED)
+        successful = sum(1 for r in final_results if r.overall_status in [ProcessingStatus.COMPLETED, ProcessingStatus.ESCALATED])
         failed = len(final_results) - successful
         
         self.logger.logger.info(
@@ -455,21 +458,33 @@ class InvoiceProcessingGraph:
     def _extract_final_state(self, result, initial_state: InvoiceProcessingState) -> InvoiceProcessingState:
         """Extract and validate final state from LangGraph result"""
         try:
-            # Try different ways to extract the state
-            if hasattr(result, 'values'):
-                candidate = result.values
-            elif isinstance(result, dict):
-                candidate = result
-            else:
-                candidate = result
-            
-            # Check if it's a proper state object
-            if hasattr(candidate, 'updated_at') and hasattr(candidate, 'process_id'):
-                final_state = candidate
-            else:
-                # Fall back to initial state
-                final_state = initial_state
-                final_state.updated_at = datetime.now()
+            # LangGraph returns the state directly as InvoiceProcessingState
+            if isinstance(result, InvoiceProcessingState):
+                return result
+
+            # LangGraph returns AddableValuesDict - extract the actual state
+            if isinstance(result, dict) or hasattr(result, '__getitem__'):
+                # The result is a dict-like object containing the state
+                # Try to get the state directly from the dict
+                for key, value in result.items():
+                    if isinstance(value, InvoiceProcessingState):
+                        return value
+
+                # If no InvoiceProcessingState found, the dict itself IS the state data
+                # The dict contains all state fields - reconstruct InvoiceProcessingState from it
+                if 'process_id' in result and 'overall_status' in result:
+                    # Create InvoiceProcessingState from dict
+                    try:
+                        final_state = InvoiceProcessingState(**result)
+                        return final_state
+                    except Exception as e:
+                        self.logger.logger.warning(f"Failed to reconstruct state from dict: {e}")
+
+            # Fall back to initial state if extraction fails
+            result_keys = list(result.keys()) if hasattr(result, 'keys') else []
+            self.logger.logger.warning(f"Could not extract final state, using initial. Result type: {type(result)}, Keys: {result_keys[:5]}")
+            final_state = initial_state
+            final_state.updated_at = datetime.now()
             
             # Ensure timestamps are set
             if not hasattr(final_state, 'updated_at') or final_state.updated_at is None:
