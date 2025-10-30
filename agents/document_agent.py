@@ -12,7 +12,7 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 
 from agents.base_agent import BaseAgent
-from state_models import (
+from state import (
     InvoiceProcessingState, InvoiceData, ItemDetail, 
     ProcessingStatus, ValidationStatus
 )

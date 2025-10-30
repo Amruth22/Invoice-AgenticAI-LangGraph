@@ -9,7 +9,7 @@ from fuzzywuzzy import fuzz
 import numpy as np
 
 from agents.base_agent import BaseAgent
-from state_models import (
+from state import (
     InvoiceProcessingState, ValidationResult, ValidationStatus,
     ProcessingStatus
 )

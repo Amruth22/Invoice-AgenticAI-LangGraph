@@ -18,8 +18,8 @@ from agents.document_agent import DocumentAgent
 from agents.validation_agent import ValidationAgent
 from agents.risk_agent import RiskAgent
 from agents.payment_agent import PaymentAgent
-from invoice_graph import InvoiceProcessingGraph
-from state_models import (
+from graph import InvoiceProcessingGraph
+from state import (
     InvoiceProcessingState, InvoiceData, ItemDetail,
     ProcessingStatus, RiskLevel, PaymentStatus,
     ValidationResult, ValidationStatus, RiskAssessment

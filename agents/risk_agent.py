@@ -13,7 +13,7 @@ import numpy as np
 from datetime import datetime, timedelta
 
 from agents.base_agent import BaseAgent
-from state_models import (
+from state import (
     InvoiceProcessingState, RiskAssessment, RiskLevel,
     ValidationStatus, ProcessingStatus
 )
