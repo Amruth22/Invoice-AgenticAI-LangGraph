@@ -416,14 +416,25 @@ class InvoiceProcessingApp:
         if result.audit_trail:
             audit_data = []
             for entry in result.audit_trail:
+                # Format details - extract key info from dict
+                details_str = ""
+                if entry.details:
+                    if isinstance(entry.details, dict):
+                        # Extract important fields
+                        key_fields = ['duration_ms', 'success_rate', 'execution_count', 'compliance_status', 'reportable_events']
+                        details_parts = [f"{k}: {entry.details[k]}" for k in key_fields if k in entry.details]
+                        details_str = ", ".join(details_parts) if details_parts else ""
+                    else:
+                        details_str = str(entry.details)
+
                 audit_data.append({
                     "Timestamp": entry.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
                     "Agent": entry.agent_name,
                     "Action": entry.action,
                     "Status": entry.status.value,
-                    "Details": str(entry.details) if entry.details else ""
+                    "Details": details_str
                 })
-            
+
             df_audit = pd.DataFrame(audit_data)
             st.dataframe(df_audit, use_container_width=True)
     
